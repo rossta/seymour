@@ -5,6 +5,7 @@ module Seymour
 
     class << self
       def distribute
+        
       end
 
       def reset_classes!
