@@ -46,6 +46,10 @@ module Seymour
       @redis ||= Seymour.redis
     end
 
+    def owner_name
+      owner.class.name
+    end
+
     def key
       "#{owner.class.name}:#{id_for_key}/#{feed_name}"
     end
