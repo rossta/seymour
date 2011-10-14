@@ -4,12 +4,10 @@ module Seymour
     attr_accessor :owner
 
     class << self
-      def distribute
-        
-      end
+      @@feed_classes = []
 
-      def reset_classes!
-        @@feed_classes = []
+      def distribute(activity)
+        activity.destination_feeds.map { |feed| feed.push(activity) }
       end
 
       def inherited(subclass)
@@ -21,7 +19,6 @@ module Seymour
       end
 
     end
-    reset_classes!
 
     def initialize(owner)
       @owner = owner
@@ -33,6 +30,14 @@ module Seymour
 
     def push(activity, cmd = :lpush)
       perform_push(activity.id, cmd) if should_push?(activity)
+    end
+
+    def remove(activity)
+      remove_id activity.id
+    end
+
+    def remove_id(activity_id)
+      redis.lrem(key, 0, activity_id)
     end
 
     private

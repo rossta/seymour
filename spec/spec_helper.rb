@@ -1,7 +1,8 @@
 # Configure Rails Environment
-ENV["RAILS_ENV"] = "test"
+ENV["RAILS_ENV"] ||= 'test'
 
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
+require 'rspec/rails'
 require "rails/test_help"
 
 dir = File.dirname(File.expand_path(__FILE__))

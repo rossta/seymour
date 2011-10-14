@@ -1,7 +1,7 @@
 require 'redis-namespace'
 
 module Seymour
-
+  
   ## Courtesy of resque
   # Returns the current Redis connection. If none has been created, will
   # create a new one.
