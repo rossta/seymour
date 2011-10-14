@@ -3,6 +3,25 @@ module Seymour
 
     attr_accessor :owner
 
+    class << self
+      def distribute
+      end
+
+      def reset_classes!
+        @@feed_classes = []
+      end
+
+      def inherited(subclass)
+        @@feed_classes << subclass
+      end
+
+      def feed_classes
+        @@feed_classes
+      end
+
+    end
+    reset_classes!
+
     def initialize(owner)
       @owner = owner
     end
