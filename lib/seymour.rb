@@ -1,3 +1,4 @@
+require "seymour/engine"
 require "seymour/version"
 require "seymour/redis"
 require "seymour/activity_feed"
