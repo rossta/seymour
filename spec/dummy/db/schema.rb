@@ -11,12 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111014120336) do
+ActiveRecord::Schema.define(:version => 20111015001158) do
 
   create_table "activities", :force => true do |t|
     t.integer  "auditable_id"
     t.string   "auditable_type"
     t.integer  "actor_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "comments", :force => true do |t|
+    t.integer  "commentable_id"
+    t.string   "commentable_type"
+    t.integer  "author_id"
+    t.text     "body"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

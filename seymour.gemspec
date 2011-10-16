@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.homepage    = ""
   s.summary     = %q{Activity feed me, Seymour}
   s.description = %q{For adding activity feeds to Rails application}
-  
+
   s.require_paths = ["lib"]
   # s.files       = `git ls-files`.split("\n")
   s.files         = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
@@ -24,8 +24,15 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 3.1.1"
   s.add_dependency "redis-namespace", "~> 1.1.0"
-  
+
   s.add_development_dependency "rspec"
   s.add_development_dependency "rspec-rails"
+  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'rspec-rails'
+  s.add_development_dependency 'steak'
+  s.add_development_dependency 'capybara'
+  s.add_development_dependency 'database_cleaner'
+  s.add_development_dependency 'factory_girl_rails'
+
   s.add_development_dependency "sqlite3"
 end

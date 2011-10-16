@@ -7,15 +7,37 @@ module Seymour
     end
 
     module ClassMethods
-      mattr_accessor :feed_classes
+      attr_accessor :audience_names, :feed_class_names
 
-      def feed(listener, opts = {})
-        feed_class = (opts[:class_name] || "#{listener}_feed".camelize).constantize
-        feed_classes << feed_class
+      def audience(*names)
+        options = names.extract_options!
+        names.each do |name|
+          class_name = options[:class_name] || name
+          feed_class_name = "#{class_name.downcase.to_s.singularize}_feed".camelize
+          audience_to_feed_classes[name] = feed_class_name
+        end
       end
 
-      def feed_classes
-        @feed_classes ||= []
+      def audience_names
+        audience_to_feed_classes.keys
+      end
+
+      def feed_class_names
+        audience_to_feed_classes.values
+      end
+
+      def feeds_for(activity)
+        audience_to_feed_classes.map do |audience_name, feed_class_name|
+          activity.send(audience_name).map { |member|
+            feed_class_name.constantize.new(member)
+          }
+        end.flatten
+      end
+
+      private
+
+      def audience_to_feed_classes
+        @audience_to_feed_classes ||= {}
       end
 
     end
@@ -23,11 +45,11 @@ module Seymour
     module InstanceMethods
 
       def distribute
-        destination_feeds.each { |feed| feed.distribute(self) }
+        feeds.map { |feed| feed.push(self) }
       end
 
-      def destination_feeds
-        self.class.feed_classes.map { |feed_class| feed_class.new(self) }
+      def feeds
+        self.class.feeds_for(self)
       end
 
     end

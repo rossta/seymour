@@ -7,7 +7,7 @@ module Seymour
       @@feed_classes = []
 
       def distribute(activity)
-        activity.destination_feeds.map { |feed| feed.push(activity) }
+        activity.feeds.map { |feed| feed.push(activity) }
       end
 
       def inherited(subclass)

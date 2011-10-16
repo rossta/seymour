@@ -17,7 +17,7 @@ describe Seymour::ActivityFeed do
         event_feed  = EventFeed.new(mock_model("Event"))
         activity    = mock_model("Activity")
 
-        activity.should_receive(:destination_feeds).and_return([event_feed])
+        activity.should_receive(:feeds).and_return([event_feed])
         event_feed.should_receive(:push).with(activity)
 
         Seymour::ActivityFeed.distribute(activity)

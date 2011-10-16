@@ -2,33 +2,60 @@ require 'spec_helper'
 
 describe Seymour::ActsAsActivity do
 
-  describe "class methods" do
-    describe "feed_classes" do
+  describe "TestActivity in dummy app" do
+    let(:user) { User.create! }
+    let(:activity) { TestActivity.create!(:actor => user) }
 
-      it "should return empty array if none specified" do
-        IgnoredActivity.feed_classes.should be_empty
+    describe "distribute" do
+      it "should push activity to audiences" do
+        feed = mock(UserFeed)
+        TestActivity.stub!(:feeds_for).and_return([feed])
+        feed.should_receive(:push).with(activity)
+        activity.distribute
+      end
+    end
+
+    describe "feeds" do
+      before(:each) do
+        activity.stub!(:authors).and_return([])
+        activity.stub!(:events).and_return([])
       end
 
-      it "should return specified feed classes" do
-        EventActivity.feed_classes.should include(EventFeed)
+      it "should create event feed for each event" do
+        event = mock_model(Event)
+        activity.should_receive(:events).and_return [event]
+        event_feed = mock(EventFeed)
+        EventFeed.should_receive(:new).with(event).and_return(event_feed)
+        activity.feeds.should include(event_feed)
       end
 
-      it "should allow class_name of feed to be specified" do
-        EventActivity.feed_classes.should include(PlayerFeed)
-      end
+      it "should create user feed for each author" do
+        user_1 = mock_model(User)
+        user_2 = mock_model(User)
+        activity.should_receive(:authors).and_return [user_1, user_2]
+        user_feed_1 = mock(UserFeed)
+        user_feed_2 = mock(UserFeed)
+        UserFeed.should_receive(:new).ordered.with(user_1).and_return(user_feed_1)
+        UserFeed.should_receive(:new).ordered.with(user_2).and_return(user_feed_2)
 
+        feeds = activity.feeds
+        feeds.should include(user_feed_1)
+        feeds.should include(user_feed_2)
+      end
+    end
+
+    describe "class methods" do
+      describe "audience" do
+        it "should add events and authors audience names" do
+          TestActivity.audience_names.should include(:events)
+          TestActivity.audience_names.should include(:authors)
+        end
+
+        it "should set up feed class names" do
+          TestActivity.feed_class_names.should include("UserFeed")
+          TestActivity.feed_class_names.should include("EventFeed")
+        end
+      end
     end
   end
-
-  describe "distribute" do
-    it "should push activity to feed_classes" do
-      feed      = mock(EventFeed)
-      activity  = EventActivity.create!
-
-      EventFeed.should_receive(:new).and_return(feed)
-      feed.should_receive(:push).with(activity)
-      activity.distribute
-    end
-  end
-
 end
