@@ -8,6 +8,7 @@ module Seymour
         include Distributable
         yield self if block_given?
       end
+      alias_method :feed_me_seymour, :acts_as_activity
     end
 
   end

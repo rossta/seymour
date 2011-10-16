@@ -27,18 +27,17 @@ class Comment
 end
 
 class Activity
-  feed_me_seymour
-
-  # acts_as_activity also works here
+  feed_me_seymour     # acts_as_activity also works here
 
   belongs_to :actor
   belongs_to :subject, :polymorphic => true
 end
 
 class CommentActivity < Activity
-  audience :team
+  audience :team      # distributes to TeamFeed by default
   audience :members,  :feed_name => "DashboardFeed"
 
+  # define methods for the audiences
   delegate :team,     :to => :comment
   delegate :members,  :to => :team
 
@@ -47,6 +46,19 @@ class CommentActivity < Activity
   end
 
 end
+
+class TeamFeed < Seymour::ActivityFeed
+end
+
+class DashboardFeed < Seymour::ActivityFeed
+end
+
+team = Team.last
+user = team.organizer
+comment = Comment.create!(:author => user, :body => "Welcome to the team!")
+activity = CommentActivity.create!(:actor => comment.author, :subject => comment)
+activity.distribute
+
 ```
 In our  example application, a blog post has many followers, and a comment
 has belongs to a blog post and an author. Let's say we'd like to distribute
@@ -55,8 +67,9 @@ the team page. Each team member has their own dashboard activity feed where
 activity items are rendered.
 
 The `feed_me_seymour` class declaration sets up activity classes with the
-ability to declare their `audience`. Activities can have any number of
-audiences. In this example, when a comment activity is created (the comment
-as the subject of the activity) it will distribute to the team feed and to
-the dashboard members
-
+ability to declare their `audience` and `distribute` to audience feeds.
+Activities can have any number of audiences. In this example, a comment
+activity is created with the comment as its subject. At some point, perhaps
+in a background job, we distribute the activity. Based on the audience
+declarations, Seymour expects a TeamFeed and a DashboardFeed class to be
+defined.
