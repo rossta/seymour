@@ -12,9 +12,8 @@ module Seymour
       def audience(*names)
         options = names.extract_options!
         names.each do |name|
-          class_name = options[:class_name] || name
-          feed_class_name = "#{class_name.downcase.to_s.singularize}_feed".camelize
-          audience_to_feed_classes[name] = feed_class_name
+          feed_name = options[:feed] || "#{name.downcase.to_s.singularize}_feed".camelize
+          audience_to_feed_classes[name] = feed_name
         end
       end
 
@@ -28,9 +27,9 @@ module Seymour
 
       def feeds_for(activity)
         audience_to_feed_classes.map do |audience_name, feed_class_name|
-          activity.send(audience_name).map { |member|
+          activity.send(audience_name).map do |member|
             feed_class_name.constantize.new(member)
-          }
+          end
         end.flatten
       end
 

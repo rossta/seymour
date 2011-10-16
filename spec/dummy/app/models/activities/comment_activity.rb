@@ -1,4 +1,3 @@
 class CommentActivity < Activity
-  audience :authors, :class_name => "User"
-
+  audience :followers, :feed => "UserFeed"
 end
