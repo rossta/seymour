@@ -11,15 +11,13 @@ Gem::Specification.new do |s|
   s.authors     = ["Ross Kaffenberger"]
   s.email       = ["rosskaff@gmail.com"]
   s.homepage    = ""
-  s.summary     = %q{Activity feed me, Seymour}
-  s.description = %q{For adding activity feeds to Rails application}
+  s.summary     = %q{Feed me activities, Seymour, please!}
+  s.description = %q{Activity feed distribution for Rails applications}
 
   s.require_paths = ["lib"]
-  # s.files       = `git ls-files`.split("\n")
   s.files         = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
+  # s.files       = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
 
   s.add_dependency "rails", "~> 3.1.1"
@@ -33,6 +31,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'capybara'
   s.add_development_dependency 'database_cleaner'
   s.add_development_dependency 'factory_girl_rails'
-
   s.add_development_dependency "sqlite3"
 end
