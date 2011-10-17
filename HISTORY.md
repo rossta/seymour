@@ -1,3 +1,8 @@
+## 0.0.3 (2011-10-16)
+
+* Added ability to render activity outside request cycle
+* Using factory girl in specs
+
 ## 0.0.2 (2011-10-16)
 
 * Added activity distribution to feeds based on 'audience' declarations
