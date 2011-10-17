@@ -7,6 +7,8 @@ module Seymour
     end
 
     module ClassMethods
+      DEFAULT_BATCH_SIZE = 500
+
       attr_accessor :audience_names, :feed_class_names
 
       def audience(*names)
@@ -26,17 +28,27 @@ module Seymour
       end
 
       def feeds_for(activity)
-        audience_to_feed_classes.map do |audience_name, feed_class_name|
-          activity.send(audience_name).map do |member|
-            feed_class_name.constantize.new(member)
+        [].tap do |feeds|
+          audience_to_feed_classes.map do |audience_name, feed_class_name|
+            try_find_each(activity.send(audience_name)) do |member|
+              feeds << feed_class_name.constantize.new(member)
+            end
           end
-        end.flatten
+        end
       end
 
       private
 
       def audience_to_feed_classes
         @audience_to_feed_classes ||= {}
+      end
+
+      def try_find_each(activity_audience, &block)
+        if defined? activity_audience.find_each
+          activity_audience.find_each(:batch_size => DEFAULT_BATCH_SIZE) &block
+        else
+          activity_audience.each &block
+        end
       end
 
     end

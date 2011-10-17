@@ -4,10 +4,11 @@ describe Seymour::Distributable do
 
   class DistributableActivity
     include Seymour::Distributable
-    audience :users, :admin
+    audience :users, :admin, :batch_size => 100
+    audience :cities, :batch_size => 100
     audience :soccer_teams, :feed => "TeamFeed"
 
-    attr_accessor :users, :admin, :soccer_teams
+    attr_accessor :users, :admin, :soccer_teams, :cities
   end
 
   describe "class methods" do
@@ -17,6 +18,7 @@ describe Seymour::Distributable do
         audience_names.should include(:users)
         audience_names.should include(:admin)
         audience_names.should include(:soccer_teams)
+        audience_names.should include(:cities)
       end
 
       it "should list activity feed classes" do
@@ -25,6 +27,10 @@ describe Seymour::Distributable do
         feed_class_names.should include('AdminFeed')
         feed_class_names.should include('TeamFeed')
       end
+
+      it "should get items in batches when specified" do
+
+      end
     end
 
     describe "feeds_for" do
@@ -32,6 +38,7 @@ describe Seymour::Distributable do
 
       before(:each) do
         activity.soccer_teams = []
+        activity.cities = []
         @user   = mock_model(User)
         @admin  = mock_model(User)
         activity.users = [@user]
