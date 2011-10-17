@@ -11,6 +11,7 @@ $LOAD_PATH.unshift dir + '/support'
 
 require 'seymour'
 require 'test_redis'
+require 'factory_girl_rails'
 
 RSpec.configure do |config|
   config.mock_with :rspec

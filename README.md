@@ -5,7 +5,7 @@ Feed me activities, Seymour, please!
 Seymour is a library for distributing activity items to  Redis-backed activity feeds
 in a Rails application.
 
-# Install
+## Install
 
 In your Gemfile
 
@@ -16,7 +16,7 @@ Or via command line
     gem install seymour
 
 
-# Overview
+## Overview
 
 Seymour provides allows an application to distribute activities to a number of interested parties. A typical activity is a small snippet of announcing an "actor" performed some action, such as a comment activity in "Coach Bob commented 'Great game, yesterday'"
 
@@ -62,7 +62,7 @@ activity  = CommentActivity.create!(:actor => comment.author, :subject => commen
 activity.distribute
 ```
 
-# Background
+## Background
 
 This library is based on the feed architecture used to distribute activity items at [Weplay](http://weplay.com). Weplay supports activity distribution to a variety of feeds: user dashboards, game day comment pages, global points leaders, etc.
 

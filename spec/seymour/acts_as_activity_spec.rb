@@ -3,8 +3,8 @@ require 'spec_helper'
 describe Seymour::ActsAsActivity do
 
   describe "TestActivity in dummy app" do
-    let(:user) { User.create! }
-    let(:activity) { TestActivity.create!(:actor => user) }
+    let(:activity)  { Factory(:test_activity) }
+    let(:user)      { activity.actor }
 
     describe "distribute" do
       it "should push activity to audiences" do
