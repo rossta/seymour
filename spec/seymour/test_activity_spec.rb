@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Seymour::ActsAsActivity do
+describe "TestActivity" do
 
   describe "TestActivity in dummy app" do
     let(:activity)  { Factory(:test_activity) }
@@ -14,16 +14,14 @@ describe Seymour::ActsAsActivity do
 
     describe "distribute" do
       it "should push activity to audiences" do
-        feed = mock(UserFeed)
-        TestActivity.stub!(:feeds_for).and_return([feed])
-        feed.should_receive(:push).with(activity)
         activity.distribute
+        UserFeed.new(activity.actor).activity_ids.should == [activity.id]
       end
     end
 
     describe "feeds" do
       before(:each) do
-        activity.stub!(:authors).and_return([])
+        activity.stub!(:users).and_return([])
         activity.stub!(:events).and_return([])
       end
 
@@ -38,7 +36,7 @@ describe Seymour::ActsAsActivity do
       it "should create user feed for each author" do
         user_1 = mock_model(User)
         user_2 = mock_model(User)
-        activity.should_receive(:authors).and_return [user_1, user_2]
+        activity.should_receive(:users).and_return [user_1, user_2]
         user_feed_1 = mock(UserFeed)
         user_feed_2 = mock(UserFeed)
         UserFeed.should_receive(:new).ordered.with(user_1).and_return(user_feed_1)
@@ -47,20 +45,6 @@ describe Seymour::ActsAsActivity do
         feeds = activity.feeds
         feeds.should include(user_feed_1)
         feeds.should include(user_feed_2)
-      end
-    end
-
-    describe "class methods" do
-      describe "audience" do
-        it "should add events and authors audience names" do
-          TestActivity.audience_names.should include(:events)
-          TestActivity.audience_names.should include(:authors)
-        end
-
-        it "should set up feed class names" do
-          TestActivity.feed_class_names.should include("UserFeed")
-          TestActivity.feed_class_names.should include("EventFeed")
-        end
       end
     end
   end

@@ -64,5 +64,6 @@ activity.distribute
 
 ## Background
 
-This library is based on the feed architecture used to distribute activity items at [Weplay](http://weplay.com). Weplay supports activity distribution to a variety of feeds: user dashboards, game day comment pages, global points leaders, etc.
+This library is based on the feed architecture used to distribute activity items at [Weplay](http://weplay.com). Weplay supports activity distribution to a variety of feeds: user dashboards, game day comment pages, global points leaders, etc. The html for each activity item is pre-rendered in a background job. To build a user's dashboard activities, the activity feed needs only to select the activities at the top of the list and output the pre-rendered html for each item, reducing the extra includes and joins needed in-process.
+
 

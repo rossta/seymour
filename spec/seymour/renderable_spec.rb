@@ -1,9 +1,16 @@
 require 'spec_helper'
 
 describe Seymour::Renderable do
+
+  class RenderableActivity
+    include Seymour::Renderable
+
+    attr_accessor :actor
+  end
+
   describe "render" do
     let(:response) { mock(ActionDispatch::Response, :body => 'Lots of activity going on') }
-    let(:activity) { Factory(:test_activity) }
+    let(:activity) { RenderableActivity.new }
 
     before(:each) do
       ok_rack_response = lambda { |env| ['200', {}, response ] }

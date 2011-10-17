@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Seymour::ActivityFeed do
 
   let(:owner) { mock("User", :id => 123) }
-  let(:feed) { Seymour::ActivityFeed.new(owner) }
+  let(:feed)  { Seymour::ActivityFeed.new(owner) }
 
   describe "class methods" do
     describe "feed_classes" do

@@ -1,6 +1,10 @@
 class TestActivity < Activity
   audience :events
-  audience :authors, :feed => "UserFeed"
+  audience :users, :feed => "UserFeed"
+
+  def users
+    [actor] + authors
+  end
 
   def events
     []
