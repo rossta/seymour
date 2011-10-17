@@ -1,4 +1,8 @@
 # Roadmap
 
+* distribution queueing
+
+* prerender activity
 The html for each activity item is pre-rendered in a background job. To build a user's dashboard activities, the activity feed needs only to select the activities at the top of the list and output the pre-rendered html for each item, reducing the extra includes and joins needed in-process.
 
+* callbacks (distribution, rendering)

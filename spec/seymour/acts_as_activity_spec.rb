@@ -6,6 +6,12 @@ describe Seymour::ActsAsActivity do
     let(:activity)  { Factory(:test_activity) }
     let(:user)      { activity.actor }
 
+    describe "render_html" do
+      it "should render activity html" do
+        activity.render_html.should == "<p>Bob tested an activity</p>"
+      end
+    end
+
     describe "distribute" do
       it "should push activity to audiences" do
         feed = mock(UserFeed)

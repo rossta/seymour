@@ -4,6 +4,8 @@ require "seymour/redis"
 require "seymour/activity_feed"
 require "seymour/acts_as_activity"
 require "seymour/distributable"
+require "seymour/renderable"
+require "seymour/render_controller"
 
 module Seymour
   extend self

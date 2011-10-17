@@ -1,4 +1,5 @@
-Factory.define :user do
+Factory.define :user do |f|
+  f.name "Bob"
 end
 
 Factory.define :comment do |f|
