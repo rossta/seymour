@@ -68,27 +68,51 @@ describe Seymour::Distributable do
           DistributableActivity.feeds_for(activity)
         end
       end
+    end
+
+    describe "actions on activity" do
+      let(:activity) { DistributableActivity.new }
+      let(:feed) { UserFeed.new(mock_model(User)) }
+
+      before(:each) do
+        DistributableActivity.stub!(:tap_feeds_for).with(activity).and_yield(feed)
+      end
 
       describe "distribute" do
         it "should push activity to each feed" do
-          feed = UserFeed.new(mock_model(User))
-          DistributableActivity.stub!(:tap_feeds_for).with(activity).and_yield(feed)
           feed.should_receive(:push).with(activity)
           DistributableActivity.distribute(activity)
         end
       end
-    end
 
+      describe "remove" do
+        it "should remove activity from each feed" do
+          feed.should_receive(:remove).with(activity)
+          DistributableActivity.remove(activity)
+        end
+      end
+    end
   end
 
   describe "instance methods" do
+    let(:activity) { DistributableActivity.new }
+    let(:feed) { UserFeed.new(mock_model(User)) }
+
+    before(:each) do
+      DistributableActivity.stub!(:tap_feeds_for).with(activity).and_yield(feed)
+    end
+
     describe "distribute" do
       it "should push itself to audience feeds" do
-        activity = DistributableActivity.new
-        feed = UserFeed.new(mock_model(User))
-        DistributableActivity.stub!(:tap_feeds_for).with(activity).and_yield(feed)
         feed.should_receive(:push).with(activity)
         activity.distribute
+      end
+    end
+
+    describe "remove" do
+      it "should remove itself from audience feeds" do
+        feed.should_receive(:remove).with(activity)
+        activity.remove
       end
     end
   end

@@ -34,6 +34,10 @@ module Seymour
       def distribute(activity)
         tap_feeds_for(activity) { |feed| feed.push(activity) }
       end
+      
+      def remove(activity)
+        tap_feeds_for(activity) { |feed| feed.remove(activity) }
+      end
 
       private
 
@@ -69,6 +73,10 @@ module Seymour
 
       def distribute
         self.class.distribute(self)
+      end
+
+      def remove
+        self.class.remove(self)
       end
 
       def feeds
