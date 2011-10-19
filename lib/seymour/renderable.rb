@@ -22,7 +22,7 @@ module Seymour
           { "REQUEST_URI" => "", "SERVER_NAME" => '' }.merge(env))
 
         controller_class = "#{controller_name}_controller".classify.constantize
-        # status, headers, response = controller_class.action(action_name.to_sym).call(env)
+
         status, headers, response = controller_class.action(action_name.to_sym).call(env)
         raise RenderError.new("#{controller_name}##{action_name}") unless status.to_i == 200
         response.body

@@ -4,8 +4,6 @@ describe Seymour::Renderable do
 
   class RenderableActivity
     include Seymour::Renderable
-
-    attr_accessor :actor
   end
 
   describe "render" do
