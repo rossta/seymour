@@ -28,17 +28,27 @@ module Seymour
       end
 
       def feeds_for(activity)
+        tap_feeds_for(activity)
+      end
+
+      def distribute(activity)
+        tap_feeds_for(activity) { |feed| feed.push(activity) }
+      end
+
+      private
+
+      def tap_feeds_for(activity, &block)
         [].tap do |feeds|
           audience_mappings.each do |audience_name, mapping|
             feed_class_name, options = mapping
             try_find_each(activity.send(audience_name), options) do |member|
-              feeds << feed_class_name.constantize.new(member)
+              feed = feed_class_name.constantize.new(member)
+              yield feed if block_given?
+              feeds << feed
             end
           end
         end
       end
-
-      private
 
       def audience_mappings
         @audience_mappings ||= {}
@@ -58,7 +68,7 @@ module Seymour
     module InstanceMethods
 
       def distribute
-        feeds.map { |feed| feed.push(self) }
+        self.class.distribute(self)
       end
 
       def feeds

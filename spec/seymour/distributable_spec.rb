@@ -31,7 +31,7 @@ describe Seymour::Distributable do
 
     end
 
-    describe "feeds_for" do
+    describe "feeding" do
       let(:activity) { DistributableActivity.new }
 
       before(:each) do
@@ -43,30 +43,42 @@ describe Seymour::Distributable do
         activity.admin = [@admin]
       end
 
-      it "should build feed for each audience member" do
-        DistributableActivity.feeds_for(activity).size.should == 2
+      describe "feeds_for" do
+        it "should build feed for each audience member" do
+          DistributableActivity.feeds_for(activity).size.should == 2
+        end
+
+        it "should assign owner to correct feed type" do
+          feed_1, feed_2 = DistributableActivity.feeds_for(activity)
+          feed_1.should be_a(UserFeed)
+          feed_1.owner.should == @user
+          feed_2.should be_a(AdminFeed)
+          feed_2.owner.should == @admin
+        end
+
+        it "should use default batch size if iterating on arel scope" do
+          activity.users = User.scoped
+          activity.users.should_receive(:find_each).with(:batch_size => 500)
+          DistributableActivity.feeds_for(activity)
+        end
+
+        it "should use specified batch size if iterating on arel scope" do
+          activity.events = Event.scoped
+          activity.events.should_receive(:find_each).with(:batch_size => 100)
+          DistributableActivity.feeds_for(activity)
+        end
       end
 
-      it "should assign owner to correct feed type" do
-        feed_1, feed_2 = DistributableActivity.feeds_for(activity)
-        feed_1.should be_a(UserFeed)
-        feed_1.owner.should == @user
-        feed_2.should be_a(AdminFeed)
-        feed_2.owner.should == @admin
-      end
-
-      it "should use default batch size if iterating on arel scope" do
-        activity.users = User.scoped
-        activity.users.should_receive(:find_each).with(:batch_size => 500)
-        DistributableActivity.feeds_for(activity)
-      end
-
-      it "should use specified batch size if iterating on arel scope" do
-        activity.events = Event.scoped
-        activity.events.should_receive(:find_each).with(:batch_size => 100)
-        DistributableActivity.feeds_for(activity)
+      describe "distribute" do
+        it "should push activity to each feed" do
+          feed = UserFeed.new(mock_model(User))
+          DistributableActivity.stub!(:tap_feeds_for).with(activity).and_yield(feed)
+          feed.should_receive(:push).with(activity)
+          DistributableActivity.distribute(activity)
+        end
       end
     end
+
   end
 
   describe "instance methods" do
@@ -74,7 +86,7 @@ describe Seymour::Distributable do
       it "should push itself to audience feeds" do
         activity = DistributableActivity.new
         feed = UserFeed.new(mock_model(User))
-        DistributableActivity.stub!(:feeds_for).with(activity).and_return([feed])
+        DistributableActivity.stub!(:tap_feeds_for).with(activity).and_yield(feed)
         feed.should_receive(:push).with(activity)
         activity.distribute
       end
