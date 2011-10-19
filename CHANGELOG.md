@@ -1,3 +1,8 @@
+## 0.0.4 (2011-10-19)
+
+* Support batched enumeration for activity distribution
+* Additional specs for activity feed
+
 ## 0.0.3 (2011-10-16)
 
 * Added ability to render activity outside request cycle
