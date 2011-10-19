@@ -4,11 +4,11 @@ describe Seymour::Distributable do
 
   class DistributableActivity
     include Seymour::Distributable
-    audience :users, :admin, :batch_size => 100
-    audience :cities, :batch_size => 100
+    audience :users, :admin
+    audience :events, :batch_size => 100
     audience :soccer_teams, :feed => "TeamFeed"
 
-    attr_accessor :users, :admin, :soccer_teams, :cities
+    attr_accessor :users, :admin, :soccer_teams, :events
   end
 
   describe "class methods" do
@@ -18,7 +18,7 @@ describe Seymour::Distributable do
         audience_names.should include(:users)
         audience_names.should include(:admin)
         audience_names.should include(:soccer_teams)
-        audience_names.should include(:cities)
+        audience_names.should include(:events)
       end
 
       it "should list activity feed classes" do
@@ -26,11 +26,9 @@ describe Seymour::Distributable do
         feed_class_names.should include('UserFeed')
         feed_class_names.should include('AdminFeed')
         feed_class_names.should include('TeamFeed')
+        feed_class_names.should include('EventFeed')
       end
 
-      it "should get items in batches when specified" do
-
-      end
     end
 
     describe "feeds_for" do
@@ -38,7 +36,7 @@ describe Seymour::Distributable do
 
       before(:each) do
         activity.soccer_teams = []
-        activity.cities = []
+        activity.events = []
         @user   = mock_model(User)
         @admin  = mock_model(User)
         activity.users = [@user]
@@ -55,6 +53,18 @@ describe Seymour::Distributable do
         feed_1.owner.should == @user
         feed_2.should be_a(AdminFeed)
         feed_2.owner.should == @admin
+      end
+
+      it "should use default batch size if iterating on arel scope" do
+        activity.users = User.scoped
+        activity.users.should_receive(:find_each).with(:batch_size => 500)
+        DistributableActivity.feeds_for(activity)
+      end
+
+      it "should use specified batch size if iterating on arel scope" do
+        activity.events = Event.scoped
+        activity.events.should_receive(:find_each).with(:batch_size => 100)
+        DistributableActivity.feeds_for(activity)
       end
     end
   end

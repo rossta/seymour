@@ -14,23 +14,24 @@ module Seymour
       def audience(*names)
         options = names.extract_options!
         names.each do |name|
-          feed_name = options[:feed] || "#{name.downcase.to_s.singularize}_feed".camelize
-          audience_to_feed_classes[name] = feed_name
+          feed_name = options.delete(:feed) || "#{name.downcase.to_s.singularize}_feed".camelize
+          audience_mappings[name] = [feed_name, options]
         end
       end
 
       def audience_names
-        audience_to_feed_classes.keys
+        audience_mappings.keys
       end
 
       def feed_class_names
-        audience_to_feed_classes.values
+        audience_mappings.values.map(&:first)
       end
 
       def feeds_for(activity)
         [].tap do |feeds|
-          audience_to_feed_classes.map do |audience_name, feed_class_name|
-            try_find_each(activity.send(audience_name)) do |member|
+          audience_mappings.each do |audience_name, mapping|
+            feed_class_name, options = mapping
+            try_find_each(activity.send(audience_name), options) do |member|
               feeds << feed_class_name.constantize.new(member)
             end
           end
@@ -39,13 +40,14 @@ module Seymour
 
       private
 
-      def audience_to_feed_classes
-        @audience_to_feed_classes ||= {}
+      def audience_mappings
+        @audience_mappings ||= {}
       end
 
-      def try_find_each(activity_audience, &block)
+      def try_find_each(activity_audience, options = {}, &block)
         if defined? activity_audience.find_each
-          activity_audience.find_each(:batch_size => DEFAULT_BATCH_SIZE) &block
+          options[:batch_size] ||= DEFAULT_BATCH_SIZE
+          activity_audience.find_each(options) &block
         else
           activity_audience.each &block
         end
