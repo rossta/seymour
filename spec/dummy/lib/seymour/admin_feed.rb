@@ -1,2 +1,2 @@
-class AdminFeed < Seymour::ActivityFeed
+class AdminFeed < Seymour::Feed
 end

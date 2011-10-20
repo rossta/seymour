@@ -1,2 +1,2 @@
-class EventFeed < Seymour::ActivityFeed
+class EventFeed < Seymour::Feed
 end

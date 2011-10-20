@@ -23,3 +23,16 @@ production:
   database: db/production.sqlite3
   pool: 5
   timeout: 5000
+
+# spec/dummy/config/database.yml
+# shared: &shared
+#   adapter: sqlite3
+#   database: db/development.sqlite3
+#   pool: 5
+#   timeout: 5000
+# 
+# development:
+#   <<: *shared
+# 
+# test:
+#   <<: *shared

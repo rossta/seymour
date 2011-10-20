@@ -61,6 +61,11 @@ module Seymour
       def try_find_each(activity_audience, options = {}, &block)
         if defined? activity_audience.find_each
           options[:batch_size] ||= DEFAULT_BATCH_SIZE
+          
+          # TODO support exclusive scope
+          # activity_audience.find_each(options) do
+          #   relation.send(:with_exclusive_scope) &block
+          # end
           activity_audience.find_each(options) &block
         else
           activity_audience.each &block

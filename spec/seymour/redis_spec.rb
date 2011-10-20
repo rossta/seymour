@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Seymour::Redis" do
+describe "Seymour.redis" do
 
   describe "redis" do
     it "can set a namespace through a url-like string" do

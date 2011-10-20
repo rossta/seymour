@@ -1,0 +1,7 @@
+Description:
+    The seymour:feed generator creates a named feed class in /app/models/feeds.
+
+Examples:
+    rails generate seymour:feed Dashboard
+
+        file: app/models/feeds/dashboard_feed.rb

@@ -45,10 +45,10 @@ end
 Declaring `feed_me_seymour` in the activity parent class provides `Activity` and its subclasses with the ability to set their `audience`. Activities can have any number of audiences. Each audience must be available as an instance method on comment activities.
 
 ``` ruby
-class TeamFeed < Seymour::ActivityFeed
+class TeamFeed < Seymour::Feed
 end
 
-class DashboardFeed < Seymour::ActivityFeed
+class DashboardFeed < Seymour::Feed
 end
 
 ```
@@ -66,4 +66,9 @@ activity.distribute
 
 This library is based on the feed architecture used to distribute activity items at [Weplay](http://weplay.com). Weplay supports activity distribution to a variety of feeds: user dashboards, game day comment pages, global points leaders, etc. The html for each activity item is pre-rendered in a background job. To build a user's dashboard activities, the activity feed needs only to select the activities at the top of the list and output the pre-rendered html for each item, reducing the extra includes and joins needed in-process.
 
+## TODO
 
+* generator for activity model + migration
+* generator for activity feed
+* support rollup
+* relevance/affinity sorting

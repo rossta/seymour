@@ -1,14 +1,14 @@
 require 'spec_helper'
 
-describe Seymour::ActivityFeed do
+describe Seymour::Feed do
 
   let(:owner) { mock_model(User) }
-  let(:feed)  { Seymour::ActivityFeed.new(owner) }
+  let(:feed)  { Seymour::Feed.new(owner) }
 
   describe "class methods" do
     describe "feed_classes" do
       it "should provide a list of feed sub classes" do
-        Seymour::ActivityFeed.feed_classes.should include(EventFeed)
+        Seymour::Feed.feed_classes.should include(EventFeed)
       end
     end
 
@@ -16,7 +16,7 @@ describe Seymour::ActivityFeed do
       it "should call activity distribute on activity" do
         activity    = mock_model(Activity)
         activity.should_receive(:distribute)
-        Seymour::ActivityFeed.distribute(activity)
+        Seymour::Feed.distribute(activity)
       end
     end
   end
@@ -37,7 +37,7 @@ describe Seymour::ActivityFeed do
     end
 
     it "new feed with same owner pushes to same list" do
-      new_feed = Seymour::ActivityFeed.new(owner)
+      new_feed = Seymour::Feed.new(owner)
 
       feed.push mock_model(Activity, :id => 123)
       new_feed.push mock_model(Activity, :id => 456)
@@ -48,7 +48,7 @@ describe Seymour::ActivityFeed do
 
     it "new feed with different owner pushes to different list" do
       new_owner = mock_model(User)
-      new_feed = Seymour::ActivityFeed.new(new_owner)
+      new_feed = Seymour::Feed.new(new_owner)
 
       feed.push mock_model(Activity, :id => 123)
       new_feed.push mock_model(Activity, :id => 456)

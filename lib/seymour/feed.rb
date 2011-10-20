@@ -1,5 +1,5 @@
 module Seymour
-  class ActivityFeed
+  class Feed
 
     attr_accessor :owner
 

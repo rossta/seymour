@@ -1,2 +1,2 @@
-class PlayerFeed < Seymour::ActivityFeed
+class PlayerFeed < Seymour::Feed
 end
