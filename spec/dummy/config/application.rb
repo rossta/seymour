@@ -10,6 +10,7 @@ require "sprockets/railtie"
 
 Bundler.require
 require "seymour"
+require "seymour/engine"
 
 module Dummy
   class Application < Rails::Application

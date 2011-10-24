@@ -39,10 +39,24 @@ module Seymour
       redis.lrem(key, 0, activity_id)
     end
 
+    def insert_and_order(activities)
+      ids = (activity_ids.map(&:to_i) + activities.map(&:id)).sort.uniq
+
+      remove_all
+
+      ids.each do |id|
+        perform_push(id)
+      end
+    end
+
     private
 
     def redis
       @redis ||= Seymour.redis
+    end
+
+    def remove_all
+      redis.del(key)
     end
 
     def owner_name

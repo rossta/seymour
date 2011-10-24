@@ -1,4 +1,3 @@
-require "seymour/engine"
 require "seymour/version"
 require "seymour/redis"
 require "seymour/feed"
@@ -9,5 +8,4 @@ require "seymour/renderable"
 
 module Seymour
   extend self
-
 end

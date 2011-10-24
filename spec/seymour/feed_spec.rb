@@ -58,6 +58,37 @@ describe Seymour::Feed do
     end
   end
 
+  describe "insert_and_order" do
+    it "should insert activities into the list" do
+      activities = [mock_model(Activity, :id => 123), mock_model(Activity, :id => 456)]
+      feed.insert_and_order(activities)
+
+      feed.activity_ids.should == [456, 123]
+    end
+
+    it "should reorder activities by id" do
+      feed.push mock_model(Activity, :id => 123)
+      feed.push mock_model(Activity, :id => 456)
+
+      activities = [mock_model(Activity, :id => 234), mock_model(Activity, :id => 789)]
+
+      feed.insert_and_order(activities)
+
+      feed.activity_ids.should == [789, 456, 234, 123]
+    end
+
+    it "should remove duplicates" do
+      feed.push mock_model(Activity, :id => 123)
+      feed.push mock_model(Activity, :id => 456)
+
+      activities = [mock_model(Activity, :id => 123), mock_model(Activity, :id => 789)]
+
+      feed.insert_and_order(activities)
+
+      feed.activity_ids.should == [789, 456, 123]
+    end
+  end
+
   describe "remove" do
     it "removes activity from list by id" do
       activity_1 = mock_model(Activity, :id => 456)
