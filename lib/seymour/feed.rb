@@ -49,7 +49,7 @@ module Seymour
       end
     end
 
-    private
+    protected
 
     def redis
       @redis ||= Seymour.redis
@@ -87,6 +87,5 @@ module Seymour
       redis.send(cmd, key, activity_id)
       redis.ltrim(key, 0, max_size)
     end
-
   end
 end
