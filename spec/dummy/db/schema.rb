@@ -14,8 +14,8 @@
 ActiveRecord::Schema.define(:version => 20111015001158) do
 
   create_table "activities", :force => true do |t|
-    t.integer  "auditable_id"
-    t.string   "auditable_type"
+    t.integer  "subject_id"
+    t.string   "subject_type"
     t.integer  "actor_id"
     t.datetime "created_at"
     t.datetime "updated_at"
