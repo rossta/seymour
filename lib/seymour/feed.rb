@@ -27,8 +27,14 @@ module Seymour
       redis.lrange(key, 0, max_size).map{|id| id.to_i }
     end
 
-    def push(activity, cmd = :lpush)
-      perform_push(activity.id, cmd) if should_push?(activity)
+    def push(activity)
+      perform_push(activity.id) if should_push?(activity)
+    end
+
+    def bulk_push(activities)
+      activities.each do |activity|
+        push(activity)
+      end
     end
 
     def remove(activity)
@@ -39,15 +45,19 @@ module Seymour
       redis.lrem(key, 0, activity_id)
     end
 
-    def insert_and_order(activities)
-      ids = (activity_ids.map(&:to_i) + activities.map(&:id)).sort.uniq
-
-      remove_all
-
-      ids.each do |id|
-        perform_push(id)
-      end
+    def sort!(options = {})
+      sort({ :order => "DESC", :store => key }.merge(options)) # replaces itself with sorted list
     end
+
+    def sort(options = {})
+      redis.sort(key, options)
+    end
+
+    def sorted_push(activities)
+      bulk_push(activities)
+      sort!
+    end
+    alias_method :insert_and_order, :sorted_push
 
     protected
 
@@ -80,11 +90,11 @@ module Seymour
     end
 
     def should_push?(activity)
-      true
+      !activity_ids.include?(activity.id)
     end
 
-    def perform_push(activity_id, cmd = :lpush)
-      redis.send(cmd, key, activity_id)
+    def perform_push(id)
+      redis.lpush(key, id)
       redis.ltrim(key, 0, max_size)
     end
   end

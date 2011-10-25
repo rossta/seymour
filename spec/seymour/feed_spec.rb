@@ -56,6 +56,27 @@ describe Seymour::Feed do
       feed.activity_ids.should == [123]
       new_feed.activity_ids.should == [456]
     end
+
+  end
+
+  describe "bulk_push" do
+    it "should accept multiple values" do
+      feed.bulk_push [mock_model(Activity, :id => 123), mock_model(Activity, :id => 456)]
+      feed.activity_ids.should == [456, 123]
+    end
+
+    it "should not append duplicates" do
+      feed.bulk_push [mock_model(Activity, :id => 123), mock_model(Activity, :id => 456), mock_model(Activity, :id => 123)]
+      feed.activity_ids.should == [456, 123]
+    end
+  end
+
+  describe "sort" do
+    it "should sort list in desc order by default" do
+      feed.bulk_push [mock_model(Activity, :id => 456), mock_model(Activity, :id => 123)]
+      feed.sort!
+      feed.activity_ids.should == [456, 123]
+    end
   end
 
   describe "insert_and_order" do
@@ -77,7 +98,7 @@ describe Seymour::Feed do
       feed.activity_ids.should == [789, 456, 234, 123]
     end
 
-    it "should remove duplicates" do
+    it "should not allow duplicates" do
       feed.push mock_model(Activity, :id => 123)
       feed.push mock_model(Activity, :id => 456)
 
