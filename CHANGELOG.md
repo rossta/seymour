@@ -1,4 +1,8 @@
-## 0.0.5 (2011-10-19)
+## 0.0.6 (2011-10-24)
+
+* Ruby 1.8.7 compatiblity
+
+## 0.0.5 (2011-10-24)
 
 * Support rails ~> 3.0
 * Remove engine
