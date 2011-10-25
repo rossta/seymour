@@ -68,7 +68,7 @@ module Seymour
           # activity_audience.find_each(options) do
           #   relation.send(:with_exclusive_scope) &block
           # end
-          activity_audience.find_each(options) &block
+          activity_audience.find_each(options, &block)
         else
           activity_audience.each &block
         end
