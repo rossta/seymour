@@ -24,7 +24,7 @@ module Seymour
       end
 
       def feed_class_names
-        audience_mappings.values.map(&:first)
+        audience_mappings.values.map(&:first).flatten
       end
 
       def feeds_for(activity)
@@ -34,7 +34,7 @@ module Seymour
       def distribute(activity)
         tap_feeds_for(activity) { |feed| feed.push(activity) }
       end
-      
+
       def remove(activity)
         tap_feeds_for(activity) { |feed| feed.remove(activity) }
       end
@@ -44,11 +44,13 @@ module Seymour
       def tap_feeds_for(activity, &block)
         [].tap do |feeds|
           audience_mappings.each do |audience_name, mapping|
-            feed_class_name, options = mapping
-            try_find_each(activity.send(audience_name), options) do |member|
-              feed = feed_class_name.constantize.new(member)
-              yield feed if block_given?
-              feeds << feed
+            feed_classes, options = mapping
+            [feed_classes].flatten.each do |feed_class_name|
+              try_find_each(activity.send(audience_name), options) do |member|
+                feed = feed_class_name.constantize.new(member)
+                yield feed if block_given?
+                feeds << feed
+              end
             end
           end
         end
@@ -61,7 +63,7 @@ module Seymour
       def try_find_each(activity_audience, options = {}, &block)
         if defined? activity_audience.find_each
           options[:batch_size] ||= DEFAULT_BATCH_SIZE
-          
+
           # TODO support exclusive scope
           # activity_audience.find_each(options) do
           #   relation.send(:with_exclusive_scope) &block

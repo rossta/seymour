@@ -5,10 +5,19 @@ describe Seymour::Distributable do
   class DistributableActivity
     include Seymour::Distributable
     audience :users, :admin
-    audience :events, :batch_size => 100
+    audience :events,       :batch_size => 100
     audience :soccer_teams, :feed => "TeamFeed"
+    audience :followers,    :feed => %w[ DashboardFeed EmailDigest ]
 
-    attr_accessor :users, :admin, :soccer_teams, :events
+    AUDIENCES = [:users, :admin, :soccer_teams, :events, :followers]
+
+    AUDIENCES.each do |audience_name|
+      attr_writer audience_name
+
+      define_method(audience_name) do
+        instance_variable_get("@#{audience_name}") || []
+      end
+    end
   end
 
   describe "class methods" do
@@ -29,14 +38,18 @@ describe Seymour::Distributable do
         feed_class_names.should include('EventFeed')
       end
 
+      it "should support multiple feeds for an audience" do
+        DistributableActivity.audience_names.should include(:followers)
+        DistributableActivity.feed_class_names.should include("DashboardFeed")
+        DistributableActivity.feed_class_names.should include("EmailDigest")
+      end
+
     end
 
     describe "feeding" do
       let(:activity) { DistributableActivity.new }
 
       before(:each) do
-        activity.soccer_teams = []
-        activity.events = []
         @user   = mock_model(User)
         @admin  = mock_model(User)
         activity.users = [@user]
