@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    seymour (0.0.4)
+    seymour (0.0.5)
       rails (~> 3.0)
       redis-namespace
 

@@ -1,3 +1,8 @@
+## 0.0.5 (2011-10-19)
+
+* Support rails ~> 3.0
+* Remove engine
+
 ## 0.0.4 (2011-10-19)
 
 * Support batched enumeration for activity distribution
