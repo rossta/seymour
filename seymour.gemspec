@@ -15,10 +15,10 @@ Gem::Specification.new do |s|
   s.description = %q{Activity feed distribution for Rails applications}
 
   s.require_paths = ["lib"]
-  s.files         = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
-  # s.files       = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.files         = `git ls-files`.split("\n")
+  # s.files         = Dir["{lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
+  s.test_files    = `git ls-files -- {spec}/*`.split("\n")
+  # s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
 
   s.add_dependency "rails", "~> 3.0"
   s.add_dependency "redis-namespace"
