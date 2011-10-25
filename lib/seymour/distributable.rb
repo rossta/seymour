@@ -14,7 +14,7 @@ module Seymour
       def audience(*names)
         options = names.extract_options!
         names.each do |name|
-          feed_name = options.delete(:feed) || "#{name.downcase.to_s.singularize}_feed".camelize
+          feed_name = options.delete(:feed) || "#{name.to_s.downcase.singularize}_feed".camelize
           audience_mappings[name] = [feed_name, options]
         end
       end
