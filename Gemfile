@@ -20,6 +20,6 @@ group :test, :development do
   gem 'guard-rspec'
   gem 'rb-fsevent' # Makes guard better
   gem 'growl_notify' # Makes guard better
-  gem 'launchy'  
+  gem 'launchy'
   gem 'yard'
 end

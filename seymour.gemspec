@@ -20,8 +20,8 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
 
-  s.add_dependency "rails", "~> 3.1.1"
-  s.add_dependency "redis-namespace", "~> 1.1.0"
+  s.add_dependency "rails", "~> 3.0"
+  s.add_dependency "redis-namespace"
 
   s.add_development_dependency "rspec"
   s.add_development_dependency "rspec-rails"
