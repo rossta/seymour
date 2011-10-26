@@ -61,12 +61,19 @@ describe Seymour::Distributable do
           DistributableActivity.feeds_for(activity).size.should == 2
         end
 
-        it "should assign owner to correct feed type" do
-          feed_1, feed_2 = DistributableActivity.feeds_for(activity)
-          feed_1.should be_a(UserFeed)
-          feed_1.owner.should == @user
-          feed_2.should be_a(AdminFeed)
-          feed_2.owner.should == @admin
+        it "should return all assigned feed types" do
+          feed_classes = DistributableActivity.feeds_for(activity).map(&:class)
+          feed_classes.should include(UserFeed)
+          feed_classes.should include(AdminFeed)
+        end
+
+        it "should assign owners to correct feed type" do
+          feeds = DistributableActivity.feeds_for(activity)
+          user_feed   = feeds.detect { |feed| feed.is_a?(UserFeed) }
+          admin_feed  = feeds.detect { |feed| feed.is_a?(AdminFeed) }
+
+          user_feed.owner.should  == @user
+          admin_feed.owner.should == @admin
         end
 
         it "should use default batch size if iterating on arel scope" do
