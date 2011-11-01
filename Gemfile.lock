@@ -1,9 +1,15 @@
+GIT
+  remote: git://github.com/defunkt/redis-namespace.git
+  revision: 5e93e72b65b76a6e9089013774eb4d393b0baa0d
+  specs:
+    redis-namespace (1.0.3)
+      redis (< 3.0.0)
+
 PATH
   remote: .
   specs:
     seymour (0.0.7)
       rails (~> 3.0)
-      redis-namespace
 
 GEM
   remote: http://rubygems.org/
@@ -86,7 +92,7 @@ GEM
     mime-types (1.16)
     multi_json (1.0.3)
     nokogiri (1.5.0)
-    polyglot (0.3.2)
+    polyglot (0.3.3)
     rack (1.3.3)
     rack-cache (1.1)
       rack (>= 0.4)
@@ -118,8 +124,6 @@ GEM
     rdoc (3.10)
       json (~> 1.4)
     redis (2.2.2)
-    redis-namespace (1.1.0)
-      redis (< 3.0.0)
     rspec (2.6.0)
       rspec-core (~> 2.6.0)
       rspec-expectations (~> 2.6.0)
@@ -185,6 +189,7 @@ DEPENDENCIES
   guard-rspec
   launchy
   rb-fsevent
+  redis-namespace!
   rspec
   rspec-rails
   ruby-debug

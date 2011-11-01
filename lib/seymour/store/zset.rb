@@ -14,9 +14,16 @@ module Seymour
         redis.zrem(key, id)
       end
 
-      def union(feeds)
-        options = feeds.extract_options!
+      def union_keys(keys, options = {})
+        redis.zunionstore key, keys, options
+      end
+
+      def union(feeds, options = { :exclude_options => true })
         redis.zunionstore key, feeds.map(&:key), options
+      end
+
+      def intersect(feeds, options = {})
+        redis.zinterstore key, feeds.map(&:key), options
       end
 
       # def zadd(score, member)

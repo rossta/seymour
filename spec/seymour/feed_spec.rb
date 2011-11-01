@@ -251,16 +251,25 @@ describe Seymour::Feed do
         feed_1.activity_ids.should == [456]
         feed_2.activity_ids.should == [789, 123]
 
-        feed.union [feed_1, feed_2]
+        feed.union([feed_1, feed_2]).should == 3
         feed.activity_ids.should == [789, 456, 123]
       end
     end
 
     describe "intersect" do
       it "should store intersection of given feeds" do
-        feed.bulk_push [new_activity(:id => 456), new_activity(:id => 123)]
-        feed.sort!
-        feed.activity_ids.should == [456, 123]
+        feed_1 = ZsetFeed.new(new_owner)
+        feed_2 = ZsetFeed.new(new_owner)
+
+        feed_1.push new_activity(:id => 456), 2
+        feed_2.push new_activity(:id => 456), 1
+        feed_2.push new_activity(:id => 789), 3
+
+        feed_1.activity_ids.should == [456]
+        feed_2.activity_ids.should == [789, 456]
+
+        feed.intersect([feed_1, feed_2])
+        feed.activity_ids.should == [456]
       end
     end
 

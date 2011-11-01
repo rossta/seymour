@@ -25,7 +25,7 @@ module Seymour
           push(activity)
         end
       end
-      
+
       def remove(activity)
         remove_id(activity.id)
       end
