@@ -1,12 +1,17 @@
 require 'redis-namespace'
 
 module Seymour
+
+  module Redis
+    
+  end
+
   ## Courtesy of resque
   # Returns the current Redis connection. If none has been created, will
   # create a new one.
   def redis
     return @redis if @redis
-    self.redis = Redis.respond_to?(:connect) ? Redis.connect : "localhost:6379"
+    self.redis = ::Redis.respond_to?(:connect) ? ::Redis.connect : "localhost:6379"
     self.redis
   end
 
@@ -21,20 +26,24 @@ module Seymour
     case server
     when String
       if server =~ /redis\:\/\//
-        redis = Redis.connect(:url => server, :thread_safe => true)
+        redis = ::Redis.connect(:url => server, :thread_safe => true)
       else
         server, namespace = server.split('/', 2)
         host, port, db = server.split(':')
-        redis = Redis.new(:host => host, :port => port,
+        redis = ::Redis.new(:host => host, :port => port,
           :thread_safe => true, :db => db)
       end
       namespace ||= :seymour
 
-      @redis = Redis::Namespace.new(namespace, :redis => redis)
-    when Redis::Namespace
+      @redis = ::Redis::Namespace.new(namespace, :redis => redis)
+    when ::Redis::Namespace
       @redis = server
     else
-      @redis = Redis::Namespace.new(:seymour, :redis => server)
+      @redis = ::Redis::Namespace.new(:seymour, :redis => server)
     end
   end
 end
+
+require 'seymour/redis/base'
+require 'seymour/redis/list'
+require 'seymour/redis/zset'

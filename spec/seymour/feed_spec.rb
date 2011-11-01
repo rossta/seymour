@@ -1,9 +1,14 @@
 require 'spec_helper'
 
 describe Seymour::Feed do
-
   let(:owner) { stub_model(User) }
   let(:feed)  { Seymour::Feed.new(owner) }
+
+  class KeyFeed < Seymour::Feed
+    key do
+      "feed::#{owner.id}"
+    end
+  end
 
   describe "class methods" do
     describe "feed_classes" do
@@ -22,10 +27,7 @@ describe Seymour::Feed do
 
     describe "key" do
       it "should override default feed key" do
-        feed = EventFeed.new(owner)
-        EventFeed.key do
-          "feed::#{owner.id}"
-        end
+        feed = KeyFeed.new(owner)
         feed.key.should == "feed::#{owner.id}"
       end
     end
