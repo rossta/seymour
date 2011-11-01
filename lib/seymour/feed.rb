@@ -4,6 +4,7 @@ module Seymour
     attr_accessor :owner
 
     class << self
+
       def key(&block)
         define_method('key_to_store', &block)
       end
@@ -19,20 +20,30 @@ module Seymour
       def feed_classes
         @@feed_classes ||= []
       end
+
+      def store(store_type)
+        @store_type = "seymour/store/#{store_type}".camelize.constantize
+      end
+
+      def store_type
+        @store_type ||= Seymour::Store::List
+      end
     end
 
     def initialize(owner)
       @owner = owner
     end
 
-    delegate  :key, :key=, :push, :perform_push, :sort, :sort!, :insert_and_order, :bulk_push,
-              :remove, :remove_id, :remove_all, :perform_push, :ids, :activity_ids, :to => :store
+    delegate  :key, :key=, :push, :sort, :sort!, :insert_and_order, :bulk_push,
+              :remove, :remove_id, :remove_all, :ids, :activity_ids, :to => :store
 
-    protected
+    delegate  :union, :intersect, :to => :store
 
     def store
-      @store ||= Seymour::Redis::List.new(key_to_store)
+      @store ||= self.class.store_type.new(key_to_store)
     end
+
+    protected
 
     def key_to_store
       "#{owner_name}:#{id_for_key}/#{feed_name}"

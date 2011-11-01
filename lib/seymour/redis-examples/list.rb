@@ -49,7 +49,7 @@ module Seymour
 
       private
 
-      def should_push?(activity)
+      def should_push?(\  )
         !activity_ids.include?(activity.id)
       end
 

@@ -43,7 +43,3 @@ module Seymour
     end
   end
 end
-
-require 'seymour/redis/base'
-require 'seymour/redis/list'
-require 'seymour/redis/zset'
