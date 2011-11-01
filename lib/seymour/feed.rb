@@ -17,6 +17,10 @@ module Seymour
       def feed_classes
         @@feed_classes
       end
+
+      def key(&block)
+        define_method('key', &block)
+      end
     end
 
     def initialize(owner)
@@ -59,6 +63,10 @@ module Seymour
     end
     alias_method :insert_and_order, :sorted_push
 
+    def key
+      "#{owner.class.name}:#{id_for_key}/#{feed_name}"
+    end
+
     protected
 
     def redis
@@ -71,10 +79,6 @@ module Seymour
 
     def owner_name
       owner.class.name
-    end
-
-    def key
-      "#{owner.class.name}:#{id_for_key}/#{feed_name}"
     end
 
     def id_for_key

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Seymour::Feed do
 
-  let(:owner) { mock_model(User) }
+  let(:owner) { stub_model(User) }
   let(:feed)  { Seymour::Feed.new(owner) }
 
   describe "class methods" do
@@ -17,6 +17,16 @@ describe Seymour::Feed do
         activity    = mock_model(Activity)
         activity.should_receive(:distribute)
         Seymour::Feed.distribute(activity)
+      end
+    end
+
+    describe "key" do
+      it "should override default feed key" do
+        feed = EventFeed.new(owner)
+        EventFeed.key do
+          "feed::#{owner.id}"
+        end
+        feed.key.should == "feed::#{owner.id}"
       end
     end
   end
@@ -139,6 +149,12 @@ describe Seymour::Feed do
   describe "owner" do
     it "should return given owner" do
       feed.owner.should == owner
+    end
+  end
+
+  describe "key" do
+    it "should return default" do
+      feed.send(:key).should == "#{owner.class.name}:#{owner.id}/seymour::feed"
     end
   end
 end
