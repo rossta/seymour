@@ -6,6 +6,7 @@ require "seymour/acts_as_activity"
 require "seymour/distributable"
 require "seymour/renderable"
 require "seymour/render_controller"
+require 'seymour/railtie' if defined?(Rails)
 
 module Seymour
   extend self

@@ -14,5 +14,3 @@ module Seymour
 
   end
 end
-
-ActiveRecord::Base.send :include, Seymour::ActsAsActivity
