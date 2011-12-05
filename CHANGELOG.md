@@ -1,3 +1,9 @@
+## 0.0.7 (2011-12-04)
+
+* Support for zset feeds
+* Extract redis methods to store module
+* Rails generator for basic feed
+
 ## 0.0.6 (2011-10-24)
 
 * Ruby 1.8.7 compatiblity
