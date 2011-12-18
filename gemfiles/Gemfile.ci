@@ -1,0 +1,4 @@
+source "http://rubygems.org"
+
+gemspec
+gem 'redis-namespace', :git => "git://github.com/defunkt/redis-namespace.git"
