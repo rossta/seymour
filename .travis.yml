@@ -1,4 +1,4 @@
 rvm:
   - 1.9.2
   - ree
-gemfile: gemfiles/Gemfile.ci
+gemfile: Gemfile.ci
