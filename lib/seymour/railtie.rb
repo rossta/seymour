@@ -8,7 +8,7 @@ module Seymour
     end
 
     rake_tasks do
-      require 'seymour/tasks/seymour_tasks.rake'
+      require 'seymour/tasks/seymour_tasks'
     end
 
     initializer "seymour.acts_as_activity" do
