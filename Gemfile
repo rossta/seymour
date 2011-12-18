@@ -9,7 +9,7 @@ gem 'redis-namespace', :git => "git://github.com/defunkt/redis-namespace.git"
 # your gem to rubygems.org.
 
 # To use debugger
-group :test, :development do
+group :development do
   gem 'ruby-debug19', :require => 'ruby-debug', :platform => :ruby_19
   gem 'ruby-debug', :platform => :ruby_18
   gem 'guard'
