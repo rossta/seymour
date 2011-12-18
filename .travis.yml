@@ -1,4 +1,7 @@
 rvm:
   - 1.9.2
   - ree
+
+before_script: "sh -c 'cd spec/dummy && rake db:migrate'"
+
 gemfile: Gemfile.ci
