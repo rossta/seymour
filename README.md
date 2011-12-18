@@ -5,6 +5,9 @@ Feed me activities, Seymour, please!
 Seymour is a library for distributing activity items to  Redis-backed activity feeds
 in a Rails application.
 
+[![Build Status](https://secure.travis-ci.org/rossta/seymour.png)](http://travis-ci.org/rossta/seymour)
+
+
 ## Install
 
 In your Gemfile
