@@ -7,3 +7,4 @@ spec/dummy/tmp/
 tmp/
 .rspec
 Gemfile.lock
+Gemfile.local
