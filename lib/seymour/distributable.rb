@@ -75,22 +75,21 @@ module Seymour
       end
 
     end
+    
+    # instance methods
 
-    module InstanceMethods
-
-      def distribute
-        self.class.distribute(self)
-      end
-
-      def remove
-        self.class.remove(self)
-      end
-
-      def feeds
-        self.class.feeds_for(self)
-      end
-
+    def distribute
+      self.class.distribute(self)
     end
+
+    def remove
+      self.class.remove(self)
+    end
+
+    def feeds
+      self.class.feeds_for(self)
+    end
+
   end
 
 

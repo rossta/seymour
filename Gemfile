@@ -1,7 +1,12 @@
 source :rubygems
 
 gemspec
+
+# Edge for proper handling of namespaces with zset
 gem 'redis-namespace', :git => "git://github.com/defunkt/redis-namespace.git"
+
+# Edge for to remove deprecated InstanceMethods includes for ActiveSupport::Concern
+gem 'ammeter', :git => "git://github.com/alexrothenberg/ammeter"
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or
