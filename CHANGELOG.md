@@ -1,3 +1,11 @@
+## 0.0.8 (2012-2-06)
+
+* travis build status; clean Gemfile dependencies
+* Move rails initialization to railtie
+* Added support for zunionstore and zinterstore
+* extract redis list object from feed
+* feed class method 'key' to define key override
+
 ## 0.0.7 (2011-12-04)
 
 * Support for zset feeds
