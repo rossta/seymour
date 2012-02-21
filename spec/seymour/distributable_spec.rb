@@ -8,16 +8,23 @@ describe Seymour::Distributable do
     audience :events,       :batch_size => 100
     audience :soccer_teams, :feed => "TeamFeed"
     audience :followers,    :feed => %w[ DashboardFeed EmailDigest ]
+    audience :for_one,      :feed => "UserFeed"
 
-    AUDIENCES = [:users, :admin, :soccer_teams, :events, :followers]
+    GROUP_AUDIENCES = [:users, :admin, :soccer_teams, :events, :followers]
 
-    AUDIENCES.each do |audience_name|
+    GROUP_AUDIENCES.each do |audience_name|
       attr_writer audience_name
 
       define_method(audience_name) do
         instance_variable_get("@#{audience_name}") || []
       end
     end
+
+    attr_writer :for_one
+    def for_one
+      @for_one || nil
+    end
+
   end
 
   describe "class methods" do
@@ -28,6 +35,8 @@ describe Seymour::Distributable do
         audience_names.should include(:admin)
         audience_names.should include(:soccer_teams)
         audience_names.should include(:events)
+        audience_names.should include(:followers)
+        audience_names.should include(:for_one)
       end
 
       it "should list activity feed classes" do
@@ -57,17 +66,17 @@ describe Seymour::Distributable do
       end
 
       describe "feeds_for" do
-        it "should build feed for each audience member" do
+        it "builds feed for each audience member" do
           DistributableActivity.feeds_for(activity).size.should == 2
         end
 
-        it "should return all assigned feed types" do
+        it "returns all assigned feed types" do
           feed_classes = DistributableActivity.feeds_for(activity).map(&:class)
           feed_classes.should include(UserFeed)
           feed_classes.should include(AdminFeed)
         end
 
-        it "should assign owners to correct feed type" do
+        it "assigns owners to correct feed type" do
           feeds = DistributableActivity.feeds_for(activity)
           user_feed   = feeds.detect { |feed| feed.is_a?(UserFeed) }
           admin_feed  = feeds.detect { |feed| feed.is_a?(AdminFeed) }
@@ -76,17 +85,28 @@ describe Seymour::Distributable do
           admin_feed.owner.should == @admin
         end
 
-        it "should use default batch size if iterating on arel scope" do
+        it "uses default batch size if iterating on arel scope" do
           activity.users = User.scoped
           activity.users.should_receive(:find_each).with(:batch_size => 500)
           DistributableActivity.feeds_for(activity)
         end
 
-        it "should use specified batch size if iterating on arel scope" do
+        it "uses specified batch size if iterating on arel scope" do
           activity.events = Event.scoped
           activity.events.should_receive(:find_each).with(:batch_size => 100)
           DistributableActivity.feeds_for(activity)
         end
+
+        it "returns feed for non-enumerable audience (of one)" do
+          activity.users = []
+          activity.admin = []
+          activity.for_one = @user
+          feeds = DistributableActivity.feeds_for(activity)
+          feeds.size.should == 1
+          feeds.map(&:class).should include(UserFeed)
+          feeds.map(&:owner).should include(@user)
+        end
+
       end
     end
 

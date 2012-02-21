@@ -47,6 +47,7 @@ module Seymour
             feed_classes, options = mapping
             [feed_classes].flatten.each do |feed_class_name|
               try_find_each(activity.send(audience_name), options) do |member|
+                
                 feed = feed_class_name.constantize.new(member)
                 yield feed if block_given?
                 feeds << feed
@@ -69,13 +70,15 @@ module Seymour
           #   relation.send(:with_exclusive_scope) &block
           # end
           activity_audience.find_each(options, &block)
-        else
+        elsif activity_audience.respond_to?(:each)
           activity_audience.each &block
+        elsif !activity_audience.nil?
+          yield activity_audience
         end
       end
 
     end
-    
+
     # instance methods
 
     def distribute
