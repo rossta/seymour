@@ -2,6 +2,7 @@
 
 * Bumps to redis-namespace v1.2.1
 * Adds redis-namespace back to gemspec
+* Update development dependencies
 
 ## 0.0.8 (2012-2-06)
 
