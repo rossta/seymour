@@ -1,3 +1,8 @@
+## 0.0.9 (2012-9-21)
+
+* Bumps to redis-namespace v1.2.1
+* Fixes LoadError when require 'seymour' without redis-namespace
+
 ## 0.0.8 (2012-2-06)
 
 * travis build status; clean Gemfile dependencies
