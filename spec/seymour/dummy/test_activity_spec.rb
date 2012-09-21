@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "TestActivity" do
 
   describe "TestActivity in dummy app" do
-    let(:activity)  { Factory(:test_activity) }
+    let(:activity)  { FactoryGirl.create(:test_activity) }
     let(:user)      { activity.actor }
 
     describe "render_html" do
