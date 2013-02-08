@@ -14,11 +14,11 @@
 ActiveRecord::Schema.define(:version => 20111015001158) do
 
   create_table "activities", :force => true do |t|
-    t.integer  "auditable_id"
-    t.string   "auditable_type"
+    t.integer  "subject_id"
+    t.string   "subject_type"
     t.integer  "actor_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "comments", :force => true do |t|
@@ -26,8 +26,8 @@ ActiveRecord::Schema.define(:version => 20111015001158) do
     t.string   "commentable_type"
     t.integer  "author_id"
     t.text     "body"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   create_table "events", :force => true do |t|
@@ -35,14 +35,14 @@ ActiveRecord::Schema.define(:version => 20111015001158) do
     t.datetime "starts_at"
     t.datetime "ends_at"
     t.text     "address"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "users", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
 end
