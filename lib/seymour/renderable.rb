@@ -25,7 +25,5 @@ module Seymour
       raise RenderError.new("#{controller_name}##{action_name}") unless status.to_i == 200
       response.body
     end
-
   end
-
 end

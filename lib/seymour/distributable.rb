@@ -6,6 +6,18 @@ module Seymour
     included do
     end
 
+    def distribute
+      self.class.distribute(self)
+    end
+
+    def remove
+      self.class.remove(self)
+    end
+
+    def feeds
+      self.class.feeds_for(self)
+    end
+
     module ClassMethods
       DEFAULT_BATCH_SIZE = 500
 
@@ -47,7 +59,7 @@ module Seymour
             feed_classes, options = mapping
             [feed_classes].flatten.each do |feed_class_name|
               try_find_each(activity.send(audience_name), options) do |member|
-                
+
                 feed = feed_class_name.constantize.new(member)
                 yield feed if block_given?
                 feeds << feed
@@ -78,22 +90,5 @@ module Seymour
       end
 
     end
-
-    # instance methods
-
-    def distribute
-      self.class.distribute(self)
-    end
-
-    def remove
-      self.class.remove(self)
-    end
-
-    def feeds
-      self.class.feeds_for(self)
-    end
-
   end
-
-
 end
