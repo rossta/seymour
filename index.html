@@ -1,31 +1,38 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Seymour by rossta</title>
-    
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <title>Seymour by rossta</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>Seymour</h1>
-        <p>Activity feed me, Seymour!</p>
-        <p class="view"><a href="https://github.com/rossta/seymour">View the Project on GitHub <small>rossta/seymour</small></a></p>
-        <ul>
-          <li><a href="https://github.com/rossta/seymour/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/rossta/seymour/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/rossta/seymour">Fork On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>Seymour</h1>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Seymour</h1>
+          <h2>Activity feed me, Seymour!</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/rossta/seymour/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/rossta/seymour/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/rossta/seymour" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="seymour" class="anchor" href="#seymour"><span class="octicon octicon-link"></span></a>Seymour</h1>
 
 <p>Feed me activities, Seymour, please!</p>
 
@@ -34,7 +41,8 @@ in a Rails application.</p>
 
 <p><a href="http://travis-ci.org/rossta/seymour"><img src="https://secure.travis-ci.org/rossta/seymour.png" alt="Build Status"></a></p>
 
-<h2>Install</h2>
+<h2>
+<a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Install</h2>
 
 <p>In your Gemfile</p>
 
@@ -46,12 +54,12 @@ in a Rails application.</p>
 <pre><code>gem install seymour
 </code></pre>
 
-<h2>Overview</h2>
+<h2>
+<a name="overview" class="anchor" href="#overview"><span class="octicon octicon-link"></span></a>Overview</h2>
 
 <p>Seymour provides allows an application to distribute activities to a number of interested parties. A typical activity is a small snippet of announcing an "actor" performed some action, such as a comment activity in "Coach Bob commented 'Great game, yesterday'"</p>
 
-<div class="highlight">
-<pre><span class="k">class</span> <span class="nc">Activity</span>
+<div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">Activity</span>
   <span class="n">belongs_to</span> <span class="ss">:actor</span>
   <span class="n">belongs_to</span> <span class="ss">:subject</span><span class="p">,</span> <span class="ss">:polymorphic</span> <span class="o">=&gt;</span> <span class="kp">true</span>
 
@@ -70,39 +78,33 @@ in a Rails application.</p>
     <span class="nb">self</span><span class="o">.</span><span class="n">subject</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</pre>
-</div>
-
+</pre></div>
 
 <p>Declaring <code>feed_me_seymour</code> in the activity parent class provides <code>Activity</code> and its subclasses with the ability to set their <code>audience</code>. Activities can have any number of audiences. Each audience must be available as an instance method on comment activities.</p>
 
-<div class="highlight">
-<pre><span class="k">class</span> <span class="nc">TeamFeed</span> <span class="o">&lt;</span> <span class="no">Seymour</span><span class="o">::</span><span class="no">Feed</span>
+<div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">TeamFeed</span> <span class="o">&lt;</span> <span class="no">Seymour</span><span class="o">::</span><span class="no">Feed</span>
 <span class="k">end</span>
 
 <span class="k">class</span> <span class="nc">DashboardFeed</span> <span class="o">&lt;</span> <span class="no">Seymour</span><span class="o">::</span><span class="no">Feed</span>
 <span class="k">end</span>
 
-</pre>
-</div>
-
+</pre></div>
 
 <p>At some point, perhaps in a background job, we distribute the activity to our audience. Instances of seymour-enabled classes have a <code>distribute</code> method, which adds the activity id to the front of Redis lists activity feeds for each audience member. Seymour expects to find the TeamFeed and DashboardFeed classes at distribution time. Other activities can distribute to the same feeds owned by the same audience members as well.</p>
 
-<div class="highlight">
-<pre><span class="n">comment</span>   <span class="o">=</span> <span class="no">Comment</span><span class="o">.</span><span class="n">create!</span> <span class="c1"># 'Great game, yesterday'</span>
+<div class="highlight highlight-ruby"><pre><span class="n">comment</span>   <span class="o">=</span> <span class="no">Comment</span><span class="o">.</span><span class="n">create!</span> <span class="c1"># 'Great game, yesterday'</span>
 <span class="n">activity</span>  <span class="o">=</span> <span class="no">CommentActivity</span><span class="o">.</span><span class="n">create!</span><span class="p">(</span><span class="ss">:actor</span> <span class="o">=&gt;</span> <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="p">,</span> <span class="ss">:subject</span> <span class="o">=&gt;</span> <span class="n">comment</span><span class="p">)</span>
 
 <span class="n">activity</span><span class="o">.</span><span class="n">distribute</span>
-</pre>
-</div>
+</pre></div>
 
-
-<h2>Background</h2>
+<h2>
+<a name="background" class="anchor" href="#background"><span class="octicon octicon-link"></span></a>Background</h2>
 
 <p>This library is based on the feed architecture used to distribute activity items at <a href="http://weplay.com">Weplay</a>. Weplay supports activity distribution to a variety of feeds: user dashboards, game day comment pages, global points leaders, etc. The html for each activity item is pre-rendered in a background job. To build a user's dashboard activities, the activity feed needs only to select the activities at the top of the list and output the pre-rendered html for each item, reducing the extra includes and joins needed in-process.</p>
 
-<h2>TODO</h2>
+<h2>
+<a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>TODO</h2>
 
 <ul>
 <li>generator for activity model + migration</li>
@@ -110,14 +112,14 @@ in a Rails application.</p>
 <li>support rollup</li>
 <li>relevance/affinity sorting</li>
 </ul>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/rossta">rossta</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-              <script type="text/javascript">
+        </section>
+
+        <footer>
+          Seymour is maintained by <a href="https://github.com/rossta">rossta</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+                  <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
@@ -128,5 +130,7 @@ in a Rails application.</p>
             } catch(err) {}
           </script>
 
+      </div>
+    </div>
   </body>
 </html>
