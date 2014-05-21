@@ -1,5 +1,0 @@
-source :rubygems
-
-gemspec
-gem 'redis-namespace', :git => "git://github.com/defunkt/redis-namespace.git"
-gem 'ammeter', :git => "git://github.com/alexrothenberg/ammeter"

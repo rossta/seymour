@@ -12,21 +12,19 @@ Gem::Specification.new do |s|
   s.email       = ["rosskaff@gmail.com"]
   s.homepage    = ""
   s.summary     = %q{Feed me activities, Seymour, please!}
-  s.description = %q{Activity feed distribution for Rails applications}
+  s.description = %q{Distribution of activities to interested parties}
 
   s.require_paths = ["lib"]
   s.files         = `git ls-files`.split("\n")
-  # s.files         = Dir["{lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
   s.test_files    = `git ls-files -- {spec}/*`.split("\n")
-  # s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
 
-  s.add_dependency "rails", ">= 3.0"
   s.add_dependency "redis-namespace"
 
+  s.add_development_dependency "rails", "~> 3.2"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency 'capybara'
   s.add_development_dependency 'database_cleaner'
-  s.add_development_dependency 'factory_girl_rails', '= 1.7.0'
+  s.add_development_dependency 'factory_girl_rails'
   s.add_development_dependency "sqlite3"
   s.add_development_dependency 'ammeter'
 end
