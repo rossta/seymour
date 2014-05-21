@@ -21,14 +21,14 @@ describe "TestActivity" do
 
     describe "feeds" do
       before(:each) do
-        activity.stub!(:users).and_return([])
-        activity.stub!(:events).and_return([])
+        activity.stub(:users).and_return([])
+        activity.stub(:events).and_return([])
       end
 
       it "should create event feed for each event" do
         event = mock_model(Event)
         activity.should_receive(:events).and_return [event]
-        event_feed = mock(EventFeed)
+        event_feed = double(EventFeed)
         EventFeed.should_receive(:new).with(event).and_return(event_feed)
         activity.feeds.should include(event_feed)
       end
@@ -37,8 +37,8 @@ describe "TestActivity" do
         user_1 = mock_model(User)
         user_2 = mock_model(User)
         activity.should_receive(:users).and_return [user_1, user_2]
-        user_feed_1 = mock(UserFeed)
-        user_feed_2 = mock(UserFeed)
+        user_feed_1 = double(UserFeed)
+        user_feed_2 = double(UserFeed)
         UserFeed.should_receive(:new).ordered.with(user_1).and_return(user_feed_1)
         UserFeed.should_receive(:new).ordered.with(user_2).and_return(user_feed_2)
 

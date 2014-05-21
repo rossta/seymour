@@ -15,10 +15,11 @@ require 'factory_girl_rails'
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
+Rails.backtrace_cleaner.remove_silencers!
+TestRedis::Server.start!(dir)
+
 RSpec.configure do |config|
   config.mock_with :rspec
   config.use_transactional_fixtures = false
 end
 
-Rails.backtrace_cleaner.remove_silencers!
-TestRedis::Server.start!(dir)

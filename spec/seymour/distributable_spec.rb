@@ -115,7 +115,7 @@ describe Seymour::Distributable do
       let(:feed) { UserFeed.new(mock_model(User)) }
 
       before(:each) do
-        DistributableActivity.stub!(:tap_feeds_for).with(activity).and_yield(feed)
+        DistributableActivity.stub(:tap_feeds_for).with(activity).and_yield(feed)
       end
 
       describe "distribute" do
@@ -139,7 +139,7 @@ describe Seymour::Distributable do
     let(:feed) { UserFeed.new(mock_model(User)) }
 
     before(:each) do
-      DistributableActivity.stub!(:tap_feeds_for).with(activity).and_yield(feed)
+      DistributableActivity.stub(:tap_feeds_for).with(activity).and_yield(feed)
     end
 
     describe "distribute" do

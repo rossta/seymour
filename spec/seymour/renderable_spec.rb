@@ -7,12 +7,12 @@ describe Seymour::Renderable do
   end
 
   describe "render" do
-    let(:response) { mock(ActionDispatch::Response, :body => 'Lots of activity going on') }
+    let(:response) { double(ActionDispatch::Response, :body => 'Lots of activity going on') }
     let(:activity) { RenderableActivity.new }
 
     before(:each) do
       ok_rack_response = lambda { |env| ['200', {}, response ] }
-      Seymour::RenderController.stub!(:action).and_return ok_rack_response
+      Seymour::RenderController.stub(:action).and_return ok_rack_response
     end
 
     it "should render activity partial via render controller" do
@@ -22,7 +22,7 @@ describe Seymour::Renderable do
 
     it "should raise RenderError if response not OK" do
       bad_rack_response = lambda { |env| ['500', {}, response ] }
-      Seymour::RenderController.stub!(:action).and_return bad_rack_response
+      Seymour::RenderController.stub(:action).and_return bad_rack_response
       calling_render = lambda {
         activity.render("seymour/render", "activity", "seymour.activity" => activity)
       }
