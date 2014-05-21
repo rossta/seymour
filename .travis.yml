@@ -3,4 +3,9 @@ rvm:
   - 1.9.3
   - ree
 
+services:
+  - redis-server
+
+env: CI=travis
+
 before_script: "sh -c 'cd spec/dummy && bundle exec rake db:migrate'"
