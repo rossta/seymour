@@ -1,9 +1,6 @@
 # Seymour
 
-Activities feeds audiences with Redis. Feed me, Seymour, please!
-
-Seymour is a library for distributing activity items to Redis-backed activity feeds
-in a Rails application.
+*Activities for those that care*. Seymour is a library for distributing activity items to Redis-backed activity feeds in a Rails application.
 
 [![Build Status](https://secure.travis-ci.org/rossta/seymour.png)](http://travis-ci.org/rossta/seymour)
 
@@ -21,31 +18,29 @@ Or via command line
 
 ## Overview
 
-Seymour provides allows an application to distribute activities to a number of interested parties. A typical activity is a small snippet of announcing an "actor" performed some action, such as a comment activity in "Coach Bob commented 'Great game, yesterday'"
+Let's say you want to display a list of activities, where an activity is something like "Coach Bob commented 'Great game, yesterday'". You may be using a gem like [public_activity](https://github.com/pokonski/public_activity) to generate activity items. 
+
+Depending on the context, deciding which activities to display can be complicated to determine during the request. The set of people who care about Coach Bob's comment may include his players, the parents of those players and other fans of the team.
+
+Seymour allows the application to distribute activities to "feeds" ahead of time, where a feed belongs to an interested party, like an individual profile or a team page.
+
+## Usage
+
+Activities can have any number of audiences. Each audience must be available as an instance method on comment activities.
 
 ``` ruby
-class Activity
-  belongs_to :actor
-  belongs_to :subject, :polymorphic => true
-
-  feed_me_seymour     # acts_as_activity also works here
-end
-
-class CommentActivity < Activity
+class CommentActivity
+  include Seymour::HasAudience
+  
+  # declare audiences
   audience :team      # distributes to TeamFeed by default
   audience :members,  :feed => "DashboardFeed"
 
-  # define methods for the audiences
-  delegate :team,     :to => :comment
-  delegate :members,  :to => :team
-
-  def comment
-    self.subject
-  end
+  # define methods for `team` and `members`
 end
 ```
 
-Declaring `feed_me_seymour` in the activity parent class provides `Activity` and its subclasses with the ability to set their `audience`. Activities can have any number of audiences. Each audience must be available as an instance method on comment activities.
+Each audience must be backed by a feed, which is a class that inherits from `Seymour::Feed`.
 
 ``` ruby
 class TeamFeed < Seymour::Feed
@@ -56,13 +51,15 @@ end
 
 ```
 
-At some point, perhaps in a background job, we distribute the activity to our audience. Instances of seymour-enabled classes have a `distribute` method, which adds the activity id to the front of Redis lists activity feeds for each audience member. Seymour expects to find the TeamFeed and DashboardFeed classes at distribution time. Other activities can distribute to the same feeds owned by the same audience members as well.
+Call `#distribute` to send the activity to its audience(s). This will add the id of the activity to a Redis list associated with each audience feed.
 
-``` ruby
-comment   = Comment.create! # 'Great game, yesterday'
-activity  = CommentActivity.create!(:actor => comment.author, :subject => comment)
-
-activity.distribute
+```ruby
+class CommentActivity
+  # ...
+  
+  # deliver activity to audiences
+  after_create :distribute
+end
 ```
 
 ## Background
