@@ -40,7 +40,7 @@ class CommentActivity
 end
 ```
 
-Each audience must be backed by a feed, which is a class that inherits from `Seymour::Feed`.
+Each audience must be backed by a feed, which is a class that inherits from `Seymour::Feed`. Add these classes to `app/models`, `app/feeds`, or wherever makes sense for your application.
 
 ``` ruby
 class TeamFeed < Seymour::Feed
