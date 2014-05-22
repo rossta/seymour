@@ -5,11 +5,18 @@ module Seymour
 
     module ClassMethods
       def acts_as_activity
+        warn "acts_as_activity is now deprecated. Use `include Seymour::HasAudience` instead."
         include Distributable
         include Renderable
         yield self if block_given?
       end
-      alias_method :feed_me_seymour, :acts_as_activity
+
+      def feed_me_seymour
+        warn "feed_me_seymour is now deprecated. Use `include Seymour::HasAudience` instead."
+        include Distributable
+        include Renderable
+        yield self if block_given?
+      end
     end
 
   end
