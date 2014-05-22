@@ -1,3 +1,8 @@
+## 0.0.10 (upcoming)
+
+* Deprecates `acts_as_activity` in favor of `include Seymour::HasAudience`
+* Update development dependencies
+
 ## 0.0.9 (2012-9-21)
 
 * Bumps to redis-namespace v1.2.1

@@ -2,11 +2,14 @@ require "seymour/version"
 require "seymour/redis"
 require "seymour/store"
 require "seymour/feed"
-require "seymour/acts_as_activity"
+require "seymour/has_audience"
 require "seymour/distributable"
-require "seymour/renderable"
-require "seymour/render_controller"
-require 'seymour/railtie' if defined?(Rails)
+if defined?(Rails)
+  require "seymour/acts_as_activity"
+  require "seymour/renderable"
+  require "seymour/render_controller"
+  require 'seymour/railtie'
+end
 
 module Seymour
   extend self

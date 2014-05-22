@@ -1,9 +1,8 @@
 module Seymour
-
   module Distributable
-    extend ActiveSupport::Concern
 
-    included do
+    def self.included(base)
+      base.extend ClassMethods
     end
 
     def distribute

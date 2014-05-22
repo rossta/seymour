@@ -4,7 +4,6 @@ module Seymour
   end
 
   module Renderable
-    extend ActiveSupport::Concern
 
     def render_html
       render("seymour/render", "activity", "seymour.activity" => self)
