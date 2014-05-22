@@ -1,6 +1,6 @@
 # Seymour
 
-*Activities for those that care*. Seymour is a library for distributing activity items to Redis-backed activity feeds in a Rails application.
+*Activities for those that care*. Seymour is a library for distributing activity items to Redis-backed activity feeds. Compatible with Rails application and other Ruby web frameworks.
 
 [![Build Status](https://secure.travis-ci.org/rossta/seymour.png)](http://travis-ci.org/rossta/seymour)
 
