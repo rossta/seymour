@@ -1,6 +1,6 @@
 # Seymour
 
-Activities feeds with Redis. Feed me, Seymour, please!
+Activities feeds audiences with Redis. Feed me, Seymour, please!
 
 Seymour is a library for distributing activity items to Redis-backed activity feeds
 in a Rails application.
