@@ -26,17 +26,28 @@ Seymour allows the application to distribute activities to "feeds" ahead of time
 
 ## Usage
 
-Activities can have any number of audiences. Each audience must be available as an instance method on comment activities.
+Activities can have any number of audiences. Each audience should be represented as instance method that returns a set of records (things with ids). For example, comment activities in a sports-themed application may look like the following.
 
 ``` ruby
 class CommentActivity
   include Seymour::HasAudience
   
+  # context
+  belongs_to :author, class_name: 'User'
+  belongs_to :subject, polymorphic: true
+
   # declare audiences
   audience :team      # distributes to TeamFeed by default
   audience :members,  :feed => "DashboardFeed"
 
   # define methods for `team` and `members`
+  def team
+    self.subject
+  end
+  
+  def members
+    team.members
+  end 
 end
 ```
 
